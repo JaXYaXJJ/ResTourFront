@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from "react-router-dom";
+import Home from "./routes/Home";
+import About from "./routes/About";
+import Tours from "./routes/Tours";
+import Login from "./routes/Login";
+import Register from "./routes/Register";
+import Navbar from "./components/Navbar/Navbar";
+import NotFound from "./routes/NotFound";
+import { useContext } from "react";
+import AuthContext from "./contexts/AuthContext";
+import TourDetails from "./routes/TourDetails";
+import Admin from "./routes/Admin";
+import AdminPost from "./routes/AdminPost";
 
-function App() {
+const App = () => {
+  const { isLoggedIn } = useContext(AuthContext)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/home" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        {isLoggedIn && <Route path="/admin" element={<Admin />} />}
+        {isLoggedIn && <Route path="/tours" element={<Tours />} />}
+        {isLoggedIn && <Route path="/tours/:id" element={<TourDetails />} />}
+        {!isLoggedIn && <Route path="/login" element={<Login />} />}
+        {!isLoggedIn && <Route path="/register" element={<Register />} />}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   );
-}
+};
 
 export default App;
